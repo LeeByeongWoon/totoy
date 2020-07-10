@@ -1,25 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Route, Redirect, Switch, Link } from 'react-router-dom';
+import { Home, Store } from './pages';
+import { StoresProvider } from 'lib/useAsync';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <StoresProvider>
+      <ul>
+        <li><Link to="/">home</Link></li>
+        <li><Link to="/store">store</Link></li>
+      </ul>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Redirect path="/home" to="/" />
+        <Route path="/store" component={Store} />
+        <Route render={() => "페이지를 찾을 수 없습니다."} />
+      </Switch>
+    </StoresProvider>
   );
 }
 
