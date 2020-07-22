@@ -11,19 +11,26 @@ export const initialstate = {
         data: null,
         error: null
     },
+    postRequst: {
+        loading: false,
+        data: null,
+        error: null
+    },
+
 };
 const loadingState = {
     loading: true,
     data: null,
     error: null
 };
-const success = (data: any) => ({
+const success = (data: any) => (
+    {
+        loading: false,
+        data,
+        error: null
+    });
+const error = (e: any) => ({
     loading: false,
-    data,
-    error: null
-});
-const error = (e: string | null) => ({
-    loading: true,
     data: null,
     error: e
 });
@@ -35,6 +42,16 @@ export function reducer(state: stateTypes, action: actionTypes) {
                 ...state,
                 stores: loadingState
             };
+        case 'GET_STORE':
+            return {
+                ...state,
+                store: loadingState
+            };
+        case 'POST_STORE':
+            return {
+                ...state,
+                postRequst: loadingState
+            };
         case 'GET_STORES_SUCCESS':
             return {
                 ...state,
@@ -44,11 +61,6 @@ export function reducer(state: stateTypes, action: actionTypes) {
             return {
                 ...state,
                 stores: error(action.error)
-            };
-        case 'GET_STORE':
-            return {
-                ...state,
-                store: loadingState
             };
         case 'GET_STORE_SUCCESS':
             return {
@@ -60,6 +72,16 @@ export function reducer(state: stateTypes, action: actionTypes) {
                 ...state,
                 store: error(action.error)
             };
+        case "POST_STORE_SUCCESS":
+            return {
+                ...state,
+                postRequst: success(action.data)
+            };
+        case "POST_STORE_ERROR":
+            return {
+                ...state,
+                postRequst: error(action.error)
+            }
         default:
             return state;
     }

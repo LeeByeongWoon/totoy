@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useStoresState, useStoresDispatch, Stores } from 'lib/useAsync';
 import StoreDetail from './StoreDetail';
+import LoadingForm from 'components/LoadingForm';
 
 
 function LoadStore() {
@@ -14,11 +15,18 @@ function LoadStore() {
         Stores(dispatch);
         setUserId(null);
     }
-
-    if (loading) return <div>로딩 중</div>;
-    if (error) return <div>에러가 발생 했습니다.</div>;
+    if (loading) return <LoadingForm />
+    if (error) return (
+        <div>
+            <p>에러가 발생 했습니다.{(error.message)}</p>
+            <button onClick={fetchData}>Load</button>
+        </div>);
     if (!data) return <button onClick={fetchData}>Load</button>;
-
+    if (data.length === 0) return (
+        <div>
+            <p>empty</p>
+            <button onClick={fetchData}>Load</button>
+        </div>)
     return (
         <div>
             <ul>

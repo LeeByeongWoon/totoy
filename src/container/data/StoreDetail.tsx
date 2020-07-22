@@ -5,13 +5,12 @@ function StoreDetail({ id }: { id: number }) {
     const state = useStoresState();
     const dispatch = useStoresDispatch();
 
-    const { loading, data, error } = state.store;
+    const { data, error } = state.store;
 
     useEffect(() => {
         Store(dispatch, id);
     }, [dispatch, id])
 
-    if (loading) return <div>loading</div>
     if (error) return <div>에러 발생</div>;
     if (!data) return null
     return (

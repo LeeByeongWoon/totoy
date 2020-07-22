@@ -1,7 +1,9 @@
 import { actionTypes, stateTypes } from './Types';
 import React, { useReducer, createContext, useContext } from 'react';
-import { getStore, getStores } from './api';
+import { getStore, getStores, postStore } from './api';
 import { reducer, initialstate } from './reducer';
+
+
 const StoresStateContext = createContext<null | stateTypes>(null);
 const StoresDispatchContext = createContext<any>(null);
 
@@ -49,13 +51,34 @@ export async function Stores(dispatch: React.Dispatch<actionTypes>) {
     dispatch({ type: 'GET_STORES' });
     try {
         const data = await getStores();
-        dispatch({
-            type: 'GET_STORES_SUCCESS',
-            data: data
-        });
+        setTimeout(() =>
+            dispatch({
+                type: 'GET_STORES_SUCCESS',
+                data: data
+            }), 1000);
+
+    } catch (e) {
+        setTimeout(() =>
+            dispatch({
+                type: "GET_STORES_ERROR",
+                error: e
+            }), 1000);
+    }
+}
+
+export async function addStore(
+    dispatch: React.Dispatch<actionTypes>, name: string, address: string) {
+    dispatch({ type: "POST_STORE" });
+    try {
+        const data = await postStore(name, address);
+        setTimeout(() => dispatch({
+            type: 'POST_STORE_SUCCESS',
+            data
+        }), 1500)
+
     } catch (e) {
         dispatch({
-            type: "GET_STORES_ERROR",
+            type: "POST_STORE_ERROR",
             error: e
         });
     }
